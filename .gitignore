@@ -1,0 +1,16 @@
+
+\.gradle/
+
+\.idea/
+
+api/out/
+
+api/build/
+
+build/
+
+core/out/
+
+core/mysql/out/
+
+*.jar
