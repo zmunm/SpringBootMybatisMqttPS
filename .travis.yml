@@ -7,4 +7,5 @@ jdk:
 
 script:
   - chmod +x gradlew
-  - ./gradlew build --scan -s
+  - gradle wrapper
+  - ./gradlew build
