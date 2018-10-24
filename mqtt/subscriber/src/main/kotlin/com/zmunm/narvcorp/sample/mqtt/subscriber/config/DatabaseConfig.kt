@@ -14,7 +14,7 @@ object DatabaseConfig {
 	val sqlSessionFactory: SqlSessionFactory by lazy {
 		SqlSessionFactoryBuilder()
 				.build(Configuration(
-						Environment.Builder("SmartCradle").apply {
+						Environment.Builder("sample").apply {
 							transactionFactory(JdbcTransactionFactory())
 							dataSource(DatabaseOption.Local.configureDataSource(DataSource()))
 						}.build())

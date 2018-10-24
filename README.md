@@ -52,36 +52,39 @@ GET|[/admins/data](docs/admins/data/get.md)|관리자 환경정보 가져오기
 ## 3.2 YML Config
 
 > option.yml
->   >Name           |Explanation    
----          |---          
+
+Name           |Explanation
+---          |---
 LogLevel       |0 = Debug , 1 = Default, 2 = Mute
 Domain         |just plain domain
 Port           |broker's MQTT port
 SSL            |true or false
-UserName       |사용자 이름
-Password       |사용자 비밀번호
-LoopInterval   |데이터 전송 간격
-LoopCount      |데이터 전송 반복 횟수
+UserName       |UserName
+Password       |Password
+LoopInterval   |LoopInterval
+LoopCount      |LoopCount
+
 > here is example
->   > ```YAML
->   > option:
->   >   LogLevel: 0
->   >   Domain: your.domain
->   >   Port: 1883
->   >   SSL: false
->   >   UserName: root
->   >   Password: 1234
->   >   LoopInterval: 3000
->   >   LoopCount: 3
->   > ```
+
+```YAML
+option:
+   LogLevel: 0
+   Domain: your.domain
+   Port: 1883
+   SSL: false
+   UserName: root
+   Password: 1234
+   LoopInterval: 3000
+   LoopCount: 3
+```
 
 > data.yml 
 >   > define individual topic and list up your data(hex byte array)
->   > ```YAML
->   > CMS_HUB/BIO_SIGNAL:
->   >   - a1b2c3d4e5f6
->   >   - ab,cd,11,22,33,44
->   > ```
+```YAML
+/topic:
+  - a1b2c3d4e5f6
+  - ab,cd,11,22,33,44
+```
 > you can make some data with `,`. It will be removed when publish 
 # 4. :matt:subscriber
 
@@ -97,22 +100,24 @@ LoopCount      |데이터 전송 반복 횟수
 ## 4.2 YML Config
 
 > option.yml
->   >Name           |Explanation    
+
+Name           |Explanation
 ---          |---
 LogLevel       |0 = Debug , 1 = Default, 2 = Mute
 Domain         |just plain domain
 Port           |broker's MQTT port
 SSL            |true or false
-UserName       |사용자 이름
-Password       |사용자 비밀번호
-> here is example
->   > ```YAML
->   > option:
->   >   LogLevel: 0
->   >   Domain: your.domain
->   >   Port: 1883
->   >   SSL: false
->   >   UserName: root
->   >   Password: 1234
->   > ```
+UserName       |UserName
+Password       |Password
 
+> here is example
+
+```YAML
+option:
+  LogLevel: 0
+  Domain: your.domain
+  Port: 1883
+  SSL: false
+  UserName: root
+  Password: 1234
+```
