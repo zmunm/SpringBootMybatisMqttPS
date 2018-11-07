@@ -13,6 +13,7 @@ buildscript {
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 		classpath "org.jetbrains.dokka:dokka-gradle-plugin:${dokka_version}"
 		classpath "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.RC9.2"
+		classpath 'gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.13.0'
 	}
 }
 
