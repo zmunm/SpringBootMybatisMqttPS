@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
 import org.mybatis.spring.SqlSessionFactoryBean
 import org.apache.ibatis.session.SqlSessionFactory
 import org.mybatis.spring.SqlSessionTemplate
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Lazy
 import javax.sql.DataSource
@@ -17,9 +18,18 @@ import javax.sql.DataSource
 @EnableTransactionManagement
 @MapperScan(basePackages = ["com.zmunm.narvcorp.sample.core.mysql.dao"])
 class DatabaseConfig{
+    @Autowired
+    private lateinit var config : YAMLConfig
+
     @Bean(destroyMethod = "close")
     fun dataSource(): DataSource  =
-            DatabaseOption.Local.configureDataSource(org.apache.tomcat.jdbc.pool.DataSource())
+            DatabaseOption.Local.configureDataSource(org.apache.tomcat.jdbc.pool.DataSource()).apply {
+                config.database.let {
+                    url = "jdbc:mysql://${it.host}:${it.port}/sample?allowMultiQueries=true"
+                    username = it.user
+                    password = it.password
+                }
+            }
 
     @Bean
     fun sqlSessionFactory(): SqlSessionFactory? = SqlSessionFactoryBean()

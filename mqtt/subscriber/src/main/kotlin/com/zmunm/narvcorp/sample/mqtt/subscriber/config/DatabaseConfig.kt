@@ -11,12 +11,13 @@ import org.apache.ibatis.session.SqlSession
 import org.apache.tomcat.jdbc.pool.DataSource
 
 object DatabaseConfig {
+	val option = DatabaseOption.Local.configureDataSource(DataSource())
 	val sqlSessionFactory: SqlSessionFactory by lazy {
 		SqlSessionFactoryBuilder()
 				.build(Configuration(
 						Environment.Builder("sample").apply {
 							transactionFactory(JdbcTransactionFactory())
-							dataSource(DatabaseOption.Local.configureDataSource(DataSource()))
+							dataSource(option)
 						}.build())
 						.apply {
 							addMapper(AdminDAO::class.java)

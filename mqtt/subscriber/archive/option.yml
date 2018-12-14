@@ -1,10 +1,12 @@
-# Size of the universe
-option:
-  LogLevel: 0
-  Domain: 192.168.0.127
+MQTT:
+  LogLevel: 2
+  Domain: localhost
   Port: 1883
   SSL: false
-  UserName: root
+  UserName: user
   Password: 1234
-  LoopInterval: 60000
-  LoopCount: -1
+MySQL:
+  Domain: localhost
+  Port: 3306
+  UserName: user
+  Password: 1234

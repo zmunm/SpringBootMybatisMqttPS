@@ -1,7 +1,7 @@
 # Size of the universe
-option:
+MQTT:
   LogLevel: 0
-  Domain: 192.168.0.127
+  Domain: localhost
   Port: 1883
   SSL: false
   UserName: root

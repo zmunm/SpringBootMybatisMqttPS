@@ -2,14 +2,26 @@ package com.zmunm.narvcorp.sample.mqtt.subscriber
 
 import com.zmunm.narvcorp.sample.mqtt.model.MqttModel
 import com.zmunm.narvcorp.sample.core.option.BaseOption
-import com.zmunm.narvcorp.sample.core.option.BaseOption.Property
+import com.zmunm.narvcorp.sample.core.option.BaseOption.MySQL
+import com.zmunm.narvcorp.sample.core.option.BaseOption.MQTT
+import com.zmunm.narvcorp.sample.mqtt.subscriber.config.DatabaseConfig
 import com.zmunm.narvcorp.sample.mqtt.subscriber.controller.MqttSubscriber
 import org.apache.commons.daemon.Daemon
 import org.apache.commons.daemon.DaemonContext
+import org.eclipse.paho.client.mqttv3.MqttException
+import java.util.*
 
 val baseOption = BaseOption()
 fun main(args: Array<String>) {
-	if(baseOption.init(args)) Init.start()
+	if(baseOption.init(args)) {
+		DatabaseConfig.option.run {
+			url = "jdbc:mysql://${baseOption.mysqlMap[MySQL.Domain.name]?:MQTT.Domain.value}:" +
+					"${baseOption.mysqlMap[MySQL.Port.name]?:MQTT.Port.value}/sample?allowMultiQueries=true"
+			username = baseOption.mysqlMap[MySQL.UserName.name]?:MQTT.UserName.value
+			password = baseOption.mysqlMap[MySQL.Password.name]?:MQTT.Password.value
+		}
+		Init.start()
+	}
 }
 
 fun stop(args: Array<String>) {
@@ -19,28 +31,29 @@ fun stop(args: Array<String>) {
 object Init:Daemon{
     private var serviceThread:Thread? = null
 	private val controller : MqttModel.Subscribe by lazy{
-        MqttSubscriber(MqttModel(baseOption.map[Property.Domain.name]
-				?: Property.Domain.value).apply {
-			quietMode = baseOption.map[Property.LogLevel.name] ?: Property.LogLevel.value.toInt() == 2
-			ssl = (baseOption.map[Property.SSL.name]
-					?: Property.SSL.value).toBoolean()
-			port = (baseOption.map[Property.Port.name]
-					?: Property.Port.value).toInt()
-			userName = baseOption.map[Property.UserName.name] ?: Property.UserName.value
-			password = baseOption.map[Property.Password.name] ?: Property.Password.value
+		MqttSubscriber(MqttModel(baseOption.mqttMap[MQTT.Domain.name]?:MQTT.Domain.value).apply {
+			quietMode = baseOption.mqttMap[MQTT.LogLevel.name]?:MQTT.LogLevel.value.toInt()==2
+			ssl = (baseOption.mqttMap[MQTT.SSL.name]?:MQTT.SSL.value).toBoolean()
+			port = (baseOption.mqttMap[MQTT.Port.name]?:MQTT.Port.value).toInt()
+			userName = baseOption.mqttMap[MQTT.UserName.name]?:MQTT.UserName.value
+			password = baseOption.mqttMap[MQTT.Password.name]?:MQTT.Password.value
 		}).mqttAdapter {
 			println(it)
 		}}
 	private val service = Runnable{
 		println("service init")
 		try{
-			while(!Thread.currentThread().isInterrupted){
-				Thread.sleep(1000L)
-				//Thread.sleep(baseOption.map[Property.LoopInterval.name].toRealTimeQuery().toLong())
-			}
+			controller.connect()
+			controller.subscribe("/test")
 		}catch(e:InterruptedException){
-			destroy()
 			println("interrupt")
+			//destroy()
+		}catch (e: MqttException){
+			println(Date())
+			println("reconnecting....")
+			println(e)
+			Thread.sleep(3 *1000L)
+			start()
 		}
 	}
 
@@ -49,8 +62,8 @@ object Init:Daemon{
 	}
 
 	override fun start(){
-		controller.connect()
-		controller.subscribe("topic")
+		serviceThread?.interrupt()
+		serviceThread = null
 		serviceThread = Thread(service).apply{start()}
 	}
 

@@ -17,6 +17,7 @@ sample
 * [MarKDown](https://www.markdownguide.org/getting-started) - if you want to update this document
     - [Cheat Sheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
     - [korean introduction](https://gist.github.com/ihoneymon/652be052a0727ad59601)
+* [Docker](https://www.docker.com/) - Install with docker
 
 # 1. :api
 
@@ -27,6 +28,8 @@ sample
 ## 1.2. Documentation
 
     Open endpoints require no Authentication.
+
+> ***endpoint***/swagger-ui.html
 
 ### 1.2.1 Admin
 
@@ -67,7 +70,7 @@ LoopCount      |LoopCount
 > here is example
 
 ```YAML
-option:
+MQTT:
    LogLevel: 0
    Domain: your.domain
    Port: 1883
@@ -86,7 +89,7 @@ option:
   - ab,cd,11,22,33,44
 ```
 > you can make some data with `,`. It will be removed when publish 
-# 4. :matt:subscriber
+# 4. :mqtt:subscriber
 
     MQTT Subscriber
     
@@ -113,11 +116,16 @@ Password       |Password
 > here is example
 
 ```YAML
-option:
-  LogLevel: 0
-  Domain: your.domain
+MQTT:
+  LogLevel: 2
+  Domain: 192.168.0.92
   Port: 1883
   SSL: false
   UserName: root
   Password: 1234
+MySQL:
+  Domain: 192.168.0.92
+  Port: 3306
+  UserName: choistec
+  Password: chois2016!
 ```
